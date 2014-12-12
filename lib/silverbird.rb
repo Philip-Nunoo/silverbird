@@ -16,7 +16,13 @@ module Silverbird
 			title = item.at_css(".catItemTitle a").text
 			running_time = item.at_css('.catItemExtraFieldsValue').text
 			image_url = nil
-			intro_text = item.at_css('.catItemIntroText p').text
+
+			intro_text = nil
+
+			if item.at_css('.catItemIntroText p')!=nil 
+				intro_text = item.at_css('.catItemIntroText p').text
+				movie.intro_text = intro_text.strip
+			end
 
 			if(item.at_css('.catItemImageBlock img') != nil)
 				image_url = item.at_css('.catItemImageBlock img')[:src]
@@ -24,7 +30,6 @@ module Silverbird
 			movie.title = title.strip
 			movie.time = running_time.strip
 			movie.image_url = "http://silverbirdcinemas.com/#{image_url}"
-			movie.intro_text = intro_text.strip
 
 			# movie.title item.at_css(".catItemTitle a").text
 			movies.push movie
