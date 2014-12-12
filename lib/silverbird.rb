@@ -17,7 +17,7 @@ module Silverbird
 			running_time = item.at_css('.catItemExtraFieldsValue').text
 			image_url = nil
 
-			intro_text = nil
+			intro_text = "No description available"
 
 			if item.at_css('.catItemIntroText p')!=nil 
 				intro_text = item.at_css('.catItemIntroText p').text
