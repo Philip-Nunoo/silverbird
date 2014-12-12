@@ -18,7 +18,8 @@ module Silverbird
 			image_url = nil
 
 			intro_text = "No description available"
-
+			movie.intro_text = intro_text
+			
 			if item.at_css('.catItemIntroText p')!=nil 
 				intro_text = item.at_css('.catItemIntroText p').text
 				movie.intro_text = intro_text.strip
