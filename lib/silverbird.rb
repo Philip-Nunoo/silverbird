@@ -20,12 +20,13 @@ def self.theatres cinema
 
 			theatre.name = theatre_name
 			theatre.url = "http://silverbirdcinemas.com/#{theatre_link}"
+			theatre.location = theatre_link
 
 			theatres.push theatre
 		end
 	else
 	end
-	
+
 	return theatres
 
 end
@@ -78,7 +79,7 @@ end
 
 class Theatre
 	@@array = Array.new
-	attr_accessor :name, :url
+	attr_accessor :name, :url, :location
 
 	def self.all_instances
 		@@array
