@@ -4,6 +4,31 @@ require 'nokogiri'
 
 module Silverbird
 # Your code goes here...
+def self.theatres cinema
+	theatres = Array.new
+
+	if cinema.downcase.to_sym.eql? :silverbird
+		# .moduletable_content #k2ModuleBox131 ul li
+		url = "http://silverbirdcinemas.com"
+
+		doc = Nokogiri::HTML(open(url))
+		doc.css(".moduletable_content #k2ModuleBox131 ul li").each do |item|
+			theatre = Theatre.new
+
+			theatre_name = item.at_css('.catTitle').text
+			theatre_link = item.at_css("a")[:href]
+
+			theatre.name = theatre_name
+			theatre.url = "http://silverbirdcinemas.com/#{theatre_link}"
+
+			theatres.push theatre
+		end
+	else
+	end
+	
+	return theatres
+
+end
 
 def self.movies_in city  	
 	movies = Array.new
@@ -48,6 +73,20 @@ end
 class City
 	def initialize(name)
 		@name = name
+	end
+end
+
+class Theatre
+	@@array = Array.new
+	attr_accessor :name, :url
+
+	def self.all_instances
+		@@array
+	end
+
+	def print
+		puts "Title: #{@name}"
+		puts "Time : #{@url}"
 	end
 end
 
