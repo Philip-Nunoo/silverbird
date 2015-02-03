@@ -10,12 +10,11 @@ def self.theatres cinema
     if cinema.downcase.to_sym.eql? :silverbird # Silverbird
         # .moduletable_content #k2ModuleBox131 ul li
         url = 'http://silverbirdcinemas.com'
-
         doc = Nokogiri::HTML(open(url))
-        doc.css(".moduletable_content #k2ModuleBox131 ul li").each do |item|
+        doc.css("ul.menu li#menu-1175-1 ul li ol li").each do |item|
             theatre = Theatre.new
 
-            theatre_name = item.at_css('.catTitle').text
+            theatre_name = item.at_css('a').text
             theatre_link = item.at_css("a")[:href]
 
             theatre.name = theatre_name
@@ -36,74 +35,57 @@ def self.theatres cinema
             binding.pry
             puts "Done"
         end
-
-        # doc = Nokogiri::HTML(open(url))
-        # doc.css(".thumbnail").each do |item|
-        #     theatre = Theatre.new
-
-        #     location = item[:href].split('/')[-1]
-
-        #     url2 = "http://drafthouse.com/calendar/#{location}/"
-
-        #     doc2 = Nokogiri::HTML(open(url2))
-        #     doc2.css(".secondary-nav").each do |item2|
-
-        #         binding.pry
-        #     end
-
-        #     # theatre_name = item.at_css('h4').text
-        #     # theatre_url = item[:href]
-
-        #     # theatre.name = theatre_name
-        #     # theatre.url = theatre_url
-        #     # theatre.location = theatre_url.split('/')[-1]
-
-        #     # theatres.push theatre
-        # end
     else
 
     end
 
     return theatres
-
 end
 
 def self.movies_in url      
     movies = Array.new
 
     doc = Nokogiri::HTML(open(url))
-    doc.css(".catItemIsFeatured").each do |item|
-            # puts "here"
-            movie = Movie.new
-            title = item.at_css(".catItemTitle a").text
-            running_time = item.at_css('.catItemExtraFieldsValue').text
-            image_url = "http://cdn.ghanaweb.com/imagelib/pics/65028362.jpg"
+    doc.css("#main-content #block-system-main .view-content .views-row").each  do |item|
+        
+        movie = Movie.new
+        title = item.at_css('.views-field-title .field-content a').text
+        image_url = item.at_css('.views-field-field-image .field-content a img')[:src]
+        intro_text = item.at_css('.views-field-body .field-content p').text
 
-            intro_text = "No description available"
-            movie.intro_text = intro_text
+        movie.title = title
+        movie.image_url = image_url
+        movie.intro_text = intro_text
 
-            if item.at_css('.catItemIntroText p')!=nil 
-                intro_text = item.at_css('.catItemIntroText p').text
-                movie.intro_text = intro_text.strip
-            end
+        movies.push movie
 
-            movie.image_url = image_url
-            if(item.at_css('.catItemImageBlock img') != nil)
-                image_url = item.at_css('.catItemImageBlock img')[:src]
-                movie.image_url = "http://silverbirdcinemas.com/#{image_url}"
-            end
-            movie.title = title.strip
-            movie.time = running_time.strip
+        # puts "Time : #{time}"
+        # movie = Movie.new
+        # title = item.at_css(".catItemTitle a").text
+        # running_time = item.at_css('.catItemExtraFieldsValue').text
+        # image_url = "http://cdn.ghanaweb.com/imagelib/pics/65028362.jpg"
 
-            # movie.title item.at_css(".catItemTitle a").text
-            movies.push movie
+        # intro_text = "No description available"
+        # movie.intro_text = intro_text
+
+        # if item.at_css('.catItemIntroText p')!=nil 
+        #     intro_text = item.at_css('.catItemIntroText p').text
+        #     movie.intro_text = intro_text.strip
+        # end
+
+        # movie.image_url = image_url
+        # if(item.at_css('.catItemImageBlock img') != nil)
+        #     image_url = item.at_css('.catItemImageBlock img')[:src]
+        #     movie.image_url = "http://silverbirdcinemas.com/#{image_url}"
+        # end
+        # movie.title = title.strip
+        # movie.time = running_time.strip
+
+        # movie.title item.at_css(".catItemTitle a").text
+        # movies.push movie
         end
 
         return movies
-    end
-
-    def self.cities
-        # return cities
     end
 end
 
